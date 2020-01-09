@@ -615,6 +615,7 @@ echo $token
 <encoded output> section2:
 eyJ1c2VyIjp7InVzZXJuYW1lIjoiYnJlYWQ3IiwicGxhdGludW0iOnRydWV9LCJleHAiOjE1NzcxNTMwOTQuMjYyfQ
 ```
+
 ```bash
 bread@sticks:~# token="eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiYnJlYWQ3IiwicGxhdGludW0iOnRydWV9LCJleHAiOjE1NzcxNTMwOTQuMjYyfQ.T-T8TGUW5nftIOziJWzooegF72NeDYPQXCxkMOIjPtA"
 ```
