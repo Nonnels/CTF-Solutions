@@ -612,6 +612,9 @@ echo $token
   },
   "exp": 1577153094.262
 }
+```
+
+```bash
 <encoded output> section2:
 eyJ1c2VyIjp7InVzZXJuYW1lIjoiYnJlYWQ3IiwicGxhdGludW0iOnRydWV9LCJleHAiOjE1NzcxNTMwOTQuMjYyfQ
 ```
