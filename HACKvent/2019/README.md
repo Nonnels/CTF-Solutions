@@ -38,7 +38,7 @@ Noticed filename?
 I thought it’s probably a base of some kind but to cover all bases (pun intended) I used `cyberchef` and baked using its magic function.
 it returned `base58`
 
-`https://gchq.github.io/CyberChef/#recipe=Magic(3,false,false,'')&input=M0RVTEsyTjdEY3BYRmc4cUdvOVo5cUVRcXZhRURwVUNCQjF2`
+[recipe](https://gchq.github.io/CyberChef/#recipe=Magic%283,false,false,''%29&input=M0RVTEsyTjdEY3BYRmc4cUdvOVo5cUVRcXZhRURwVUNCQjF2
 
     `HV19{Dont_confuse_0_and_O}`
 
