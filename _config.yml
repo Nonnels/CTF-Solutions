@@ -5,4 +5,6 @@ kramdown:
   syntax_highlighter: rouge
   syntax_highlighter_opts:
     css_class: 'highlight'
-theme: jekyll-theme-hacker
+#theme: jekyll-theme-hacker
+theme: minimal-mistakes-jekyll
+minimal_mistakes_skin: "dark"
