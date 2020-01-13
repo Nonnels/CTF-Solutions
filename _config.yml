@@ -1,4 +1,4 @@
-theme: jekyll-theme-midnight
+
 kramdown:
     input: GFM
     syntax_highlighter: rouge
