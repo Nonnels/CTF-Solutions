@@ -1364,7 +1364,7 @@ I opened the file in `ghidra`, to find several functions having their instructio
 
 Glancing at different functions, I found `FUN_0040114d` which looks like the main loop that looks at which operation has been selected.
 here is the `pseudo C` that shows the if else selection.
-```C
+```c
   if (DAT_00402138 == '+') {
     uValue = FUN_004015b6((char)uValue,extraout_DL_02,extraout_CL_02,DAT_00402120);
   }
@@ -1388,7 +1388,7 @@ here is the `pseudo C` that shows the if else selection.
 
 By replacing each of the function calls with an appropriate name it made looking for the flag significantly easier.
 this is where I found the flag_decode routine `(FUN_00401519)` 
-```C
+```c
 undefined __register decode(undefined param_1, undefined
 undefined         AL:1           <RETURN>
 undefined         AL:1           param_1
@@ -1545,10 +1545,8 @@ From there I registered `ſanta` and now I can log in as `santa`.
 Once again being a reverse engineering challenge my first go to tool is `ghidra`.
 this allowed me to see `main()` function, how a large hex string is being put on the stack, along with a call to `_dance()`.
 
-```C
-undefined4 _main(void)
-
-{
+```c
+undefined4 _main(void){
   size_t sVar1;
   uint uVar2;
   char acStack192 [32];
@@ -1621,7 +1619,7 @@ I started collecting the `hex` values and then looking at the `_dance()` functio
 `_dance()` and `_dance_block()` looked simple enough to implement, however `_dance_words()` looked like a nightmare.
 
 here's sample snippet:
-```C
+```c
 do {
 uVar5 = local_54 ^ (local_64[0] + local_34 >> 0x19 | (local_64[0] + local_34) * 0x80);
 uVar1 = local_44 ^ (uVar5 + local_64[0] >> 0x17 | (uVar5 + local_64[0]) * 0x200);
@@ -1652,12 +1650,12 @@ Here is where I got so messed up, =(
 
 It took me longer than I would like to admit, to figure out the endianness, but if we look at the `nonce` value being used:
 
-```C
+```c
 _dance((int)&local_a0,sVar1,0,(undefined4 *)&local_60,0xe78f4511,0xb132d0a8);
 ```
 and taking endianness into account we get `11458fe7a8d032b1`.
 Doing the same for the `key` which starts at `&local_60`.
-```C
+```c
 local_30 = DAT_0000bfd8; // F15E6A45636CF1ADh
 uStack40 = DAT_0000bfe0; // B5A0A29D46799DEDh
 local_40 = DAT_0000bfc8; // 6B400CECF40F7379h
