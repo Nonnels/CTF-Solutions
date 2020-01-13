@@ -48,7 +48,6 @@ and we have the flag:
 - Extrapolating that to mean this password is `p/k2-k4!`
 - Unzip using the password and get the flag
 
-
     `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`
     
 ## Beeeep_Beeeep - Category: Misc
@@ -57,7 +56,6 @@ and we have the flag:
 - Found the specific video [Oscilloscope Music - (Drawing with Sound) - Smarter Every Day 224](https://www.youtube.com/watch?v=4gibcRfp4zA)
 - Looked for an Oscilloscope tool and found [asdfg.me/osci/](http://asdfg.me/osci/)
 - Opened the file and we have the flag being played in pieces
-
 
     `TMHC{0f5ee61ef3fbb4bb066df8c286ec84b07a7a5d95}`
     
@@ -114,8 +112,8 @@ undefined8 main(undefined4 param_1,undefined8 param_2){
 ```
 
 From here we can see a couple of things:
- - `first_chall()`
- - `local_98` is the name variable, `local_3c` is length and they are used in the `name_check` function.
+ - ```first_chall()```
+ - ```local_98``` is the name variable, ```local_3c``` is length and they are used in the ```name_check``` function.
  - If that function returns a `0`, then our name variable is used in the string `"/bin/echo Hello \"%s\""` which is an argument to `system()`.
 
 This means we can probably command inject, but first we need to see what `first_chall` and `name_check` do.
