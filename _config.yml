@@ -1,4 +1,4 @@
 highlighter: rouge
 markdown: GFM
 
-theme: jekyll-theme-time-machine
+theme: jekyll-theme-hacker
