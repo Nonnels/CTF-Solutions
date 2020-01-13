@@ -48,8 +48,10 @@ and we have the flag:
 - Extrapolating that to mean this password is `p/k2-k4!`
 - Unzip using the password and get the flag
 
-    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`
-    
+
+    `TMHC{1_kn0w_d35cr1pt1v3_n0t4t10n}`   
+
+
 ## Beeeep_Beeeep - Category: Misc
 
 - Listened to the audio and recognised it as a video from SmarterEveryDay
@@ -57,7 +59,9 @@ and we have the flag:
 - Looked for an Oscilloscope tool and found [asdfg.me/osci/](http://asdfg.me/osci/)
 - Opened the file and we have the flag being played in pieces
 
+
     `TMHC{0f5ee61ef3fbb4bb066df8c286ec84b07a7a5d95}`
+    
     
 ## overdosed - Category: PWN
 
@@ -158,7 +162,7 @@ Ok lets read the code:
     - `local_28 == 0x7869704851` or `QHpix`
 - For no apparent reason a `gets(local_68)` call exists
     - `local_68` is not used after this point.
-    -  `local_68 [64]`, length is 64.
+    - `local_68 [64]`, length is 64.
     - `gets()` is a known vulnerable function, used in BOF attacks
 
 This means we have a BOF, and with it (depending on the stack layout) we can control the environment variable (`name`).
