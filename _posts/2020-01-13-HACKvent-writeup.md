@@ -1,8 +1,8 @@
 ---
 title: "Hackvent 2019: CTF Writeup"
-last_modified_at: 2020-01-12T13:37:13-05:00
+last_modified_at: 2020-01-12T13:37:01-05:00
 categories:
-  - CTF
+  - blog
 tags:
   - Hackvent
   - writeup
